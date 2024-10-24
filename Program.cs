@@ -31,11 +31,21 @@ namespace EFAPIMarvel1
 
             app.UseAuthorization();
             //GET endPOINTS
-            app.MapGet("/users", () => db.TblAvengers.ToList())
+            app.MapGet("/users", () =>
+            {
+                DbApiContext db = new DbApiContext();
+                return db.TblAvengers.ToList();
+                db.Dispose();
+            })
             .WithName("/GetUsers")
             .WithOpenApi();
 
-            app.MapGet("/contacts", () => db.TblContacts.ToList())
+            app.MapGet("/contacts", () =>
+            {
+                DbApiContext db = new DbApiContext();
+                return db.TblAvengers.ToList();
+                db.Dispose();
+            })
             .WithName("/GetContacts")
             .WithOpenApi();
 
