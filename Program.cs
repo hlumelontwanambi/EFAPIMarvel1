@@ -96,15 +96,25 @@ namespace EFAPIMarvel1
             //DELETE endpoints
             app.MapDelete("/users/{username}", (string username) =>
             {
-                var user = db.TblAvengers.FirstOrDefault(u => u.Username == username);
-                if (user != null)
+                try
                 {
-                    db.TblAvengers.Remove(user);
-                    db.SaveChanges();
-                    return Results.NoContent();
+                    DbApiContext db = new DbApiContext();
+                    var user = db.TblAvengers.FirstOrDefault(u => u.Username == username);
+                    if (user != null)
+                    {
+                        db.TblAvengers.Remove(user);
+                        db.SaveChanges();
+                        db.Dispose();
+                        return Results.NoContent();
+                    }
                 }
-                return Results.NotFound();
-
+                catch(Exception e) 
+                { 
+                    return Results.Conflict(); 
+                }
+                    return Results.NotFound();
+                
+               
             }).WithName("DeleteUser").WithOpenApi();
 
             app.MapDelete("/contacts/{id}", (int id) =>
